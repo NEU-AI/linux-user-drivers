@@ -1,1 +1,6 @@
 温湿度传感器RJ48接口对应Blurr板的IO引脚分别是162~165
+
+dht22项目不能用gpioclass，因为gpioclass封装的是/sys/class/gpio下面的驱动，
+导致01切换的速度比较慢，无法达到dht11要求的时序。
+
+所以我们在dht11用的是另外一种思路的mmio驱动（直接访问寄存器）
