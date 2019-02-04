@@ -8,17 +8,17 @@ Gpio::Gpio()
 /**
  * @brief Gpio::getGpio
  * @param id
- * @param method 's'=/sys/class/gpio 'm'=memory map io
+ * @param method
  * @return
  */
-Gpio* Gpio::getGpio(unsigned id, char method)
+Gpio* Gpio::getGpio(unsigned id, enum access_method method)
 {
     Gpio* ret = NULL;
     switch (method) {
-    case 's':
+    case SYS_CLASS:
         ret = GPIOClass::getGpio(id);
         break;
-    case 'm':
+    case MMAP:
         break;
     default:
         break;

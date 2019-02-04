@@ -21,9 +21,9 @@ GPIOClass *GPIOClass::getGpio(unsigned id)
     return new GPIOClass(id);
 }
 
-int GPIOClass::setDirection(char dir)
+int GPIOClass::setDirection(enum direction dir)
 {
-    return this->setdir_gpio((dir=='o')?"out":"in");
+    return this->setdir_gpio((dir==OUTPUT)?"out":"in");
 }
 
 int GPIOClass::setValue(int value)

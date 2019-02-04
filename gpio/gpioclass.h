@@ -12,7 +12,7 @@ class GPIOClass: public Gpio
 {
 public:
     static GPIOClass* getGpio(unsigned id);
-    int setDirection(char dir);
+    int setDirection(enum direction dir);
     int setValue(int value);
     int getValue();
 private:

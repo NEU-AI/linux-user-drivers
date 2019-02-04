@@ -57,7 +57,7 @@ int main()
     unsigned io_number[] = {91,90,9,162};
     for(int i=0;i<4;i++){
         io[i] = Gpio::getGpio(io_number[i]);
-        io[i]->setDirection('o');
+        io[i]->setDirection(Gpio::OUTPUT);
     }
 
     stop();
