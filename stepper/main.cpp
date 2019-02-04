@@ -1,25 +1,20 @@
 #include <stdint.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "gpioclass.h"
+#include "gpio.h"
 
-GPIOClass *a,*b,*c,*d;
-GPIOClass *io[4];
+Gpio *io[4];
 void stop()
 {
     for(int i=0;i<4;i++){
-        io[i]->setval_gpio("0");
+        io[i]->setValue(0);
     }
 }
 
 void output(uint8_t value)
 {
     for(int i=0;i<4;i++){
-        if(value & 1)
-            io[i]->setval_gpio("1");
-        else
-            io[i]->setval_gpio("0");
-
+        io[i]->setValue(value & 1);
         value = value >> 1;
     }
     usleep(3e3);
@@ -59,27 +54,11 @@ void motor_ffw(int dir)
 
 int main()
 {
-    a = new GPIOClass("91");//4
-    a->export_gpio();
-    a->setdir_gpio("out");
-    io[0]=a;
-
-    b = new GPIOClass("90");//2
-    b->export_gpio();
-    b->setdir_gpio("out");
-    io[1]=b;
-
-    c = new GPIOClass("9");//9
-    c->export_gpio();
-    c->setdir_gpio("out");
-    io[2]=c;
-
-    d = new GPIOClass("162");//10
-    d->export_gpio();
-    d->setdir_gpio("out");
-    io[3]=d;
-
-
+    unsigned io_number[] = {91,90,9,162};
+    for(int i=0;i<4;i++){
+        io[i] = Gpio::getGpio(io_number[i]);
+        io[i]->setDirection('o');
+    }
 
     stop();
 

@@ -6,14 +6,42 @@
 
 using namespace std;
 
-GPIOClass::GPIOClass()
+//GPIOClass::GPIOClass()
+//{
+//    this->gpionum = "4"; //GPIO4 is default
+//}
+
+//GPIOClass::GPIOClass(string gnum)
+//{
+//    this->gpionum = gnum;  //Instatiate GPIOClass object for GPIO pin number "gnum"
+//}
+
+GPIOClass *GPIOClass::getGpio(unsigned id)
 {
-    this->gpionum = "4"; //GPIO4 is default
+    return new GPIOClass(id);
 }
 
-GPIOClass::GPIOClass(string gnum)
+int GPIOClass::setDirection(char dir)
 {
-    this->gpionum = gnum;  //Instatiate GPIOClass object for GPIO pin number "gnum"
+    return this->setdir_gpio((dir=='o')?"out":"in");
+}
+
+int GPIOClass::setValue(int value)
+{
+    string v;
+    v = value;
+    return this->setval_gpio(v);
+}
+
+int GPIOClass::getValue()
+{
+    return 0;
+}
+
+GPIOClass::GPIOClass(unsigned id)
+{
+    this->gpionum = id;
+    this->export_gpio();
 }
 
 int GPIOClass::export_gpio()
