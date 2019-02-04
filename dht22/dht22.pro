@@ -1,4 +1,4 @@
-QT -= core
+QT += core
 QT -= gui
 
 CONFIG += c++11
@@ -10,10 +10,8 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    gpioclass.cpp \
     dht_read.cpp \
-    mmio.c \
-    dht_utils.c
+    dht_utils.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -27,7 +25,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    gpioclass.h \
     dht_read.h \
-    mmio.h \
     dht_utils.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../gpio/release/ -lgpio
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../gpio/debug/ -lgpio
+else:unix: LIBS += -L$$OUT_PWD/../gpio/ -lgpio
+
+INCLUDEPATH += $$PWD/../gpio
+DEPENDPATH += $$PWD/../gpio

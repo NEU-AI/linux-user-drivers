@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <iostream>
+using namespace std;
 #include "dht_read.h"
-#include "gpioclass.h"
 int main(int argc, char *argv[])
 {
 //    QCoreApplication a(argc, argv);
