@@ -1,5 +1,6 @@
 #include "gpio.h"
 #include "gpioclass.h"
+#include "mmio.h"
 
 Gpio::Gpio()
 {
@@ -19,6 +20,7 @@ Gpio* Gpio::getGpio(unsigned id, enum access_method method)
         ret = GPIOClass::getGpio(id);
         break;
     case MMAP:
+        ret = GpioMMapIMX6::getGpio(id);
         break;
     default:
         break;

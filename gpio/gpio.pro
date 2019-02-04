@@ -24,12 +24,14 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         gpio.cpp \
-    gpioclass.cpp
+    gpioclass.cpp \
+    mmio.cpp
 
 HEADERS += \
         gpio.h \
         gpio_global.h \ 
-    gpioclass.h
+    gpioclass.h \
+    mmio.h
 
 unix {
     target.path = /usr/lib

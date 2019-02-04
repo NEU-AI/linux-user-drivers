@@ -16,7 +16,7 @@ public:
     int setValue(int value);
     int getValue();
 private:
-//    GPIOClass();  // create a GPIO object that controls GPIO4 (default
+    GPIOClass();  // create a GPIO object that controls GPIO4 (default
     GPIOClass(unsigned id);
 //    GPIOClass(string x); // create a GPIO object that controls GPIOx, where x is passed to this constructor
 
