@@ -10,7 +10,6 @@ CONFIG -= app_bundle
 TEMPLATE = app
 
 SOURCES += main.cpp \
-    gpioclass.cpp \
     bh1750.cpp
 
 # The following define makes your compiler emit warnings if you use
@@ -25,6 +24,19 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 HEADERS += \
-    gpioclass.h \
     bh1750.h
 
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../gpio/release/ -lgpio
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../gpio/debug/ -lgpio
+else:unix: LIBS += -L$$OUT_PWD/../gpio/ -lgpio
+
+INCLUDEPATH += $$PWD/../gpio
+DEPENDPATH += $$PWD/../gpio
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../gpio/release/ -lgpio
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../gpio/debug/ -lgpio
+else:unix: LIBS += -L$$OUT_PWD/../gpio/ -lgpio
+
+INCLUDEPATH += $$PWD/../gpio
+DEPENDPATH += $$PWD/../gpio

@@ -35,7 +35,9 @@ int GPIOClass::setValue(int value)
 
 int GPIOClass::getValue()
 {
-    return 0;
+    string v;
+    this->getval_gpio(v);
+    return (v=="1")?1:0;
 }
 
 GPIOClass::GPIOClass(unsigned id)
@@ -90,7 +92,6 @@ int GPIOClass::setdir_gpio(string dir)
 
 int GPIOClass::setval_gpio(string val)
 {
-
     string setval_str = "/sys/class/gpio/gpio" + this->gpionum + "/value";
     ofstream setvalgpio(setval_str.c_str()); // open value file for gpio
         if (!setvalgpio.is_open()){

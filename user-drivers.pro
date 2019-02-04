@@ -1,6 +1,7 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
+    bh1750 \
     gpio \
     stepper
 

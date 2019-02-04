@@ -7,33 +7,26 @@ BH1750::BH1750()
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-#include <gpioclass.h>
+#include "gpio.h"
 
 void delay_IIC()
 {
     usleep(10);
 }
 
-GPIOClass *sda, *scl;
+Gpio *sda, *scl;
 
 void iic_byte_write(uint8_t data)
 {//向IIC总线写入一个字节的数据函数
-    sda->setdir_gpio("out");
+    sda->setDirection(Gpio::OUTPUT);
 //    printf("w");
     for(int i=0;i<8;i++)//有8位数据
     {
-        if(data&0x80){//写最高位的数据
-//            printf("1");
-            sda->setval_gpio("1");
-        }
-        else{
-//            printf("0");
-            sda->setval_gpio("0");
-        }
+        sda->setValue(data&0x80);//写最高位的数据
         delay_IIC();
-        scl->setval_gpio("1"); //拉高时钟线，将数写入到设备中。
+        scl->setValue(1); //拉高时钟线，将数写入到设备中。
         delay_IIC();
-        scl->setval_gpio("0");//拉低时钟线，允许改变数据线的状态
+        scl->setValue(0);//拉低时钟线，允许改变数据线的状态
         delay_IIC();
         data=data<<1;//数据左移一位，把次高位放在最高位,为写入次高位做准备
     }
@@ -46,23 +39,19 @@ uint8_t iic_byte_read()
     //从IIC总线读取一个字节的数据函数
     unsigned char i;
     unsigned char Data;       //定义一个缓冲寄存器。
-    sda->setdir_gpio("in");
+    sda->setDirection(Gpio::INPUT);
 //    printf("r");
     for(i=0;i<8;i++)//有8位数据
     {
-        scl->setval_gpio("1");//拉高时钟线，为读取下一位数据做准备。
+        scl->setValue(1);//拉高时钟线，为读取下一位数据做准备。
         delay_IIC();
         Data=Data<<1;//将缓冲字节的数据左移一位，准备读取数据。
         delay_IIC();
-        string v;
-        sda->getval_gpio(v);
-        if(v=="1"){ //如果数据线为高平电平。
+        if(sda->getValue()){ //如果数据线为高平电平。
             Data=Data|0x1;//则给缓冲字节的最低位写1。
 //            printf("1");
-        }else{
-//            printf("0");
         }
-        scl->setval_gpio("0");//拉低时钟线，为读取下一位数据做准备。
+        scl->setValue(0);//拉低时钟线，为读取下一位数据做准备。
         delay_IIC();
     }
 //    printf("\n");
@@ -71,77 +60,70 @@ uint8_t iic_byte_read()
 
 void iic_start()  //iic起始信号
 {
-    sda->setdir_gpio("out");
-    sda->setval_gpio("1");//拉高数据线
-    scl->setval_gpio("1");//拉高时钟线
+    sda->setDirection(Gpio::OUTPUT);
+    sda->setValue(1);//拉高数据线
+    scl->setValue(1);//拉高时钟线
     delay_IIC();
-    sda->setval_gpio("0");//在时钟线为高电平时，拉低数据线，产生起始信号。
+    sda->setValue(0);//在时钟线为高电平时，拉低数据线，产生起始信号。
     delay_IIC();
-    scl->setval_gpio("0");//拉低时钟线
+    scl->setValue(0);//拉低时钟线
 //    printf("start\n");
 }
 
 uint8_t iic_wait_ack()       //等待从机应答
 {
     uint8_t ack=0;//定义一个位变量，来暂存应答状态。
-    sda->setdir_gpio("in");
+    sda->setDirection(Gpio::INPUT);
 //    IIC_SDA=1;//释放数据总线，准备接收应答信号。
     delay_IIC();
-    scl->setval_gpio("1");//拉高时钟线。
+    scl->setValue(1);//拉高时钟线。
     delay_IIC();
-    string v;
-    sda->getval_gpio(v);
-    if(v=="1"){
+    if(sda->getValue()){
         ack=1;//读取应答信号的状态。
 //        printf("no-ack\n");
-    }else{
-//        printf("ack\n");
     }
     delay_IIC();
-    scl->setval_gpio("0");//拉低时钟线。
+    scl->setValue(0);//拉低时钟线。
     delay_IIC();
     return ack;//返回应答信号的状态，0表示应答，1表示非应答。
 }
 
 uint8_t iic_ack_slave(int ack)       //应答从机
 {
-    sda->setdir_gpio("out");
+    sda->setDirection(Gpio::OUTPUT);
 //    IIC_SDA=1;//释放数据总线，准备接收应答信号。
     if(ack){
-        sda->setval_gpio("0");
+        sda->setValue(0);
 //        printf("read ack\n");
     }else{
-        sda->setval_gpio("1");
+        sda->setValue(1);
 //        printf("read !ack\n");
     }
     delay_IIC();
-    scl->setval_gpio("1");//拉高时钟线。
+    scl->setValue(1);//拉高时钟线。
     delay_IIC();
-    scl->setval_gpio("0");//拉低时钟线。
+    scl->setValue(0);//拉低时钟线。
     delay_IIC();
-
     return ack;//返回应答信号的状态，0表示应答，1表示非应答。
 }
 
 void iic_stop() //iic停止信号
 {
-    sda->setdir_gpio("out");
-    sda->setval_gpio("0");//拉低数据线
+    sda->setDirection(Gpio::OUTPUT);
+    sda->setValue(0);//拉低数据线
     delay_IIC();
-    scl->setval_gpio("1");//拉高时钟线。
+    scl->setValue(1);//拉高时钟线。
     delay_IIC();
-    sda->setval_gpio("1");//时钟时线为高电平时，拉高数据线，产生停止信号。
+    sda->setValue(1);//时钟时线为高电平时，拉高数据线，产生停止信号。
     delay_IIC();
 //    printf("stop\n");
 }
 
 void iic_init()
 {
-    sda = new GPIOClass("6");
-    scl = new GPIOClass("5");
-    sda->export_gpio();
-    scl->export_gpio();
-    scl->setdir_gpio("out");
+    sda = Gpio::getGpio(6);
+    scl = Gpio::getGpio(5);
+    scl->setDirection(Gpio::OUTPUT);
 }
 
 
