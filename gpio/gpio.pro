@@ -8,8 +8,7 @@ QT       -= gui
 
 TARGET = gpio
 TEMPLATE = lib
-
-DEFINES += GPIO_LIBRARY
+CONFIG += staticlib
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked as deprecated (the exact warnings
