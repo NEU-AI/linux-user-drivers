@@ -7,7 +7,7 @@ BH1750::BH1750()
 #include <stdio.h>
 #include <stdint.h>
 #include <unistd.h>
-#include "gpio.h"
+#include "../gpio/gpio.h"
 
 void delay_IIC()
 {

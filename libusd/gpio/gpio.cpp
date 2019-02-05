@@ -15,6 +15,8 @@ Gpio::Gpio()
 Gpio* Gpio::getGpio(unsigned id, enum access_method method)
 {
     Gpio* ret = NULL;
+    if(id<0)
+        return NULL;
     switch (method) {
     case SYS_CLASS:
         ret = GPIOClass::getGpio(id);

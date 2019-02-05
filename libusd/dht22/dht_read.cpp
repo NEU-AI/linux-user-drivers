@@ -23,7 +23,7 @@
 #include <iostream>
 using namespace std;
 #include "dht_read.h"
-#include "gpio.h"
+#include "../gpio/gpio.h"
 #include "dht_utils.h"
 
 // This is the only processor specific magic value, the maximum amount of time to

@@ -1,10 +1,9 @@
 #ifndef GPIO_H
 #define GPIO_H
 
-#include "gpio_global.h"
 
 
-class GPIOSHARED_EXPORT Gpio
+class Gpio
 {
 protected:
     Gpio();
