@@ -19,7 +19,7 @@ int BitBangSPI::addDevice(int cs, SpiDevice *dev)
     d->dev = dev;
     dev->setMaster(this);
     devices.append(d);
-    return devices.length() - 1;
+    return devices.size() - 1;
 }
 
 int BitBangSPI::transfer(SpiList* buffer)

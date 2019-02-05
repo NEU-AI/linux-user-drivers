@@ -2,6 +2,7 @@
 #define SPI_H
 #include <QVector>
 #include <QLinkedList>
+#include <inttypes.h>
 #include "../gpio/gpio.h"
 
 typedef struct
